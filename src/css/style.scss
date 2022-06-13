@@ -1,3 +1,32 @@
 @import 'mixins.scss';
 @import 'lib/donut.scss';
 @import 'lib/nouislider.scss';
+
+#portman-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.2);
+    z-index: 999;
+    display: none;
+    &.active {
+        display: block;
+    }
+}
+
+#portman-calculator {
+    position: fixed;
+    background: white;
+    height: 400px;
+    width: 300px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    display: none;
+    &.active {
+        display: block;
+    }
+}
