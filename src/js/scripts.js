@@ -25,7 +25,7 @@ require('./lib/nouislider.js');
     },
 
     build: function() {
-   
+        window.alert('UTM Source: ' + this.config.utm_source);
     }, 
 
   }; 
