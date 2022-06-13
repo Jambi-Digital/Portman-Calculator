@@ -1,0 +1,144 @@
+#donut-chart
+{
+    position: relative;
+
+    overflow: hidden;
+
+    width: 300px;
+    height: 300px;
+
+    border-radius: 50%;
+    background-color: #182C3B;
+    -webkit-box-shadow: 0 0 0 6px rgba(0, 0, 0, .2);
+            box-shadow: 0 0 0 6px rgba(0, 0, 0, .2);
+
+    @include phone {
+        display: none !important;       
+    }
+    display: none;
+    &.active {
+        display: block;
+    }
+}
+
+.outer-circle,
+.inner-circle
+{
+    position: absolute;
+
+    border-radius: 50%;
+}
+
+.outer-circle
+{
+    top: 6%;
+    right: 6%;
+    bottom: 6%;
+    left: 6%;
+
+    background-color: #182C3B;
+    -webkit-box-shadow: inset 0 0 0 6px rgba(0, 0, 0, .2);
+            box-shadow: inset 0 0 0 6px rgba(0, 0, 0, .2);
+}
+
+.inner-circle
+{
+    top: 22%;
+    right: 22%;
+    bottom: 22%;
+    left: 22%;
+
+    background-color: #182C3B;
+    
+}
+
+.inner-circle-label,
+.inner-circle-value
+{
+    position: absolute;
+    top: 50%;
+    left: 0;
+
+    display: block;
+
+    width: 100%;
+
+    text-align: center;
+
+}
+
+.inner-circle-label
+{
+    font-size: 14px;
+    line-height: 1;
+
+    margin-top: -30px;
+
+    color: grey;
+}
+
+.inner-circle-value
+{
+    font-size: 24px;
+    line-height: 1;
+
+    margin-top: -12px;
+
+    color: white;
+}
+
+.wedge-container,
+.wedge,
+.wedge-extension,
+.wedge-label
+{
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    -webkit-transition: all .4s linear;
+            transition: all .4s linear;
+
+    border-radius: 50%;
+}
+
+.wedge,
+.wedge-extension
+{
+    
+}
+
+.wedge-value
+{
+    display: none; 
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 20px;
+
+    position: absolute;
+    top: 5%;
+    left: 50%;
+
+    width: 30px;
+    margin-left: -15px;
+
+    text-align: center;
+}
+
+.wedge-extension
+{
+    z-index: 100;
+}
+
+.wedge
+{
+    z-index: 200;
+}
+
+.wedge-label
+{
+    z-index: 300;
+}
