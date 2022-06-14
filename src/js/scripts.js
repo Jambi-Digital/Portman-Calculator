@@ -22,8 +22,8 @@ require('./lib/donut-chart.js');
         defaults: function() {
             this.defaults = {
                 borrowing_amount: 90,
-                min_interest_rate: 0.039,
-                max_interest_rate: 0.099,
+                min_interest_rate: 3.9,
+                max_interest_rate: 9.9,
                 submit_url: 'https://portmanassetfinance.com#form',
                 logo_image_url: 'https://www.portmanassetfinance.co.uk/calculator/default-logo.svg',
                 background_colour: '#0e212f',
@@ -77,7 +77,7 @@ require('./lib/donut-chart.js');
             var itemBorrowingAmount = itemPrice * (borrowingAmount / 100);
             var deposit = 100 - parseInt(borrowingAmount);
 
-            var midInterestRate = (((maxInterestRate - minInterestRate) / 2) + minInterestRate) * 100;
+            var midInterestRate = ((maxInterestRate - minInterestRate) / 2) + minInterestRate;
 
             var formattedItemPrice = this.formatCurrency(itemPrice);
             var formattedBorrowingAmount = this.formatCurrency(itemBorrowingAmount);
@@ -142,7 +142,7 @@ require('./lib/donut-chart.js');
             <div class="field credit-profile">
                 <label>4. Select your credit profile</label>
                 <input type="range" id="portman_credit_profile" name="portman_credit_profile" 
-                min="` + minInterestRate * 100 + `" max="` + maxInterestRate * 100 + `" value="` + midInterestRate + `" step="0.1">
+                min="` + minInterestRate + `" max="` + maxInterestRate + `" value="` + midInterestRate + `" step="0.1">
                 <div class="credit-profile-labels">  
                     <span>Exceptional</span>
                     <span>Good</span>
