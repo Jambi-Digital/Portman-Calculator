@@ -19,11 +19,11 @@ Once the JavaScript and CSS files are embedded you'll need to run this code:
 
 var calc = Object.create(PortmanCalculator);
                 
-calc.init({
-    utm_source: 'Your UTM Source value',
-    utm_medium: 'Your UTM Medium value',
-    utm_campaign: 'Your UTM Campaign value',
-});
+    calc.init({
+        utm_source: 'Your UTM Source value',
+        utm_medium: 'Your UTM Medium value',
+        utm_campaign: 'Your UTM Campaign value',
+    });
 
 This should be done after all the script files are loaded, for example in the $(document).ready() function if using jQuery
 
