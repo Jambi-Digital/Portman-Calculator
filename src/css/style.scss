@@ -2,6 +2,8 @@
 @import 'lib/donut.scss';
 @import 'lib/nouislider.scss';
 
+$form-border: #97A7B5;
+
 #portman-overlay {
     position: fixed;
     top: 0;
@@ -19,14 +21,122 @@
 #portman-calculator {
     position: fixed;
     background: white;
-    height: 400px;
-    width: 300px;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
     z-index: 1000;
     display: none;
+    max-height: 80vh;
+    overflow: auto;
     &.active {
         display: block;
+    }
+    padding: 1em;
+    .title-and-logo {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        margin-bottom: 1em;
+        .title {
+            font-size: 2em;
+        }
+        .logo {
+            img {
+                max-height: 3em;
+            }            
+        }
+    }
+    .field {
+        margin-bottom: 1em;
+        label {
+            font-weight: bold;
+            margin-bottom: 0.5em;
+            display: block;
+        }
+        input[type=text] {
+            border: 1px solid $form-border;
+            background: transparent;
+            border-radius: 6px;
+            margin-bottom: 0px;
+            padding: 0.5em 1em;
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
+            @include placeholder {
+                color: white;
+            }
+            &:focus {
+                background: rgba(white, 0.25);
+            }
+        }
+         
+    }
+    .button {
+        width: 100%;
+        padding: 1em 2em;
+        border-radius: 6px;
+        border: none;
+        font-weight: bold;
+        font-size: 1.25em;
+        &:hover {
+            cursor: pointer;
+        }
+    }
+    .month-options {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        .month {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 2em;
+            font-weight: bold;
+            border-width: 1px;
+            border-radius: 6px;
+            border-style: solid;
+            padding: 0.5rem;
+            span {
+                font-size: 0.75rem;
+            }
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    }
+    .credit-profile-labels {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 0.75em;
+    }
+    .results {
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom-width: 1px;
+            border-bottom-style: solid;
+
+            .label {
+                font-weight: bold;
+                font-size: 1.5em;
+            }
+        }
+    }
+    .tooltip, .footer .bottom {
+        opacity: 0.75;
+        font-size: 0.75rem;
+        padding: 1em 0;
+    }
+    .footer {
+        .top {
+            margin-top: 1em;
+            font-size: 1.25em;
+            font-weight: bold;
+        }
     }
 }

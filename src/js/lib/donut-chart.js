@@ -43,7 +43,7 @@
         this.config = {
           container: options.container ? options.container : this.config.container,
           data: options.data ? options.data : this.config.data,
-          label: options.label ? this.label : 'Total Payable',
+          label: options.label ? this.label : 'Monthly payment',
           offset: options.offset ? options.offset : 0
         };
   

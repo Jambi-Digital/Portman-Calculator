@@ -11,14 +11,6 @@
     background-color: #182C3B;
     -webkit-box-shadow: 0 0 0 6px rgba(0, 0, 0, .2);
             box-shadow: 0 0 0 6px rgba(0, 0, 0, .2);
-
-    @include phone {
-        display: none !important;       
-    }
-    display: none;
-    &.active {
-        display: block;
-    }
 }
 
 .outer-circle,

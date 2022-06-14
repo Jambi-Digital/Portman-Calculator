@@ -1,5 +1,5 @@
 require('./lib/donut-chart.js');
-require('./lib/nouislider.js');
+
 
 /**
   * Portman Calculator
@@ -7,7 +7,7 @@ require('./lib/nouislider.js');
   */
 
  ;(function(window, document, undefined) {
-
+    require('./lib/nouislider.js');
     'use strict';
   
     var PortmanCalculator = PortmanCalculator || {
@@ -22,11 +22,11 @@ require('./lib/nouislider.js');
 
         defaults: function() {
             this.defaults = {
-                borrowing_amount: 0.9,
+                borrowing_amount: 90,
                 min_interest_rate: 0.039,
                 max_interest_rate: 0.099,
                 submit_url: 'https://portmanassetfinance.com#form',
-                logo_image_url: 'https://www.portmanassetfinance.co.uk/wp-content/uploads/2022/05/Portman-Logo-2022-White-Bold.svg',
+                logo_image_url: 'https://www.portmanassetfinance.co.uk/calculator/default-logo.svg',
                 background_colour: '#0e212f',
                 text_colour: '#ffffff',
                 accent_colour_one: '#00dcb4',
@@ -74,6 +74,10 @@ require('./lib/nouislider.js');
             var utmMedium = this.config.utm_medium;
             var utmCampaign = this.config.utm_campaign;
 
+            var itemBorrowingAmount = itemPrice * (borrowingAmount / 100);
+            var totalPayable = '';
+            var monthlyPayment = '';
+
             var calcDiv = document.getElementById("portman-calculator");
             if (calcDiv) {
                 calcDiv.remove();
@@ -86,6 +90,8 @@ require('./lib/nouislider.js');
             
             var calcDiv = document.createElement('div');
             calcDiv.id = 'portman-calculator';
+            // calcDiv.style.cssText = 'background-color:"' + backgroundColour + ';"';
+            calcDiv.setAttribute("style", "background-color:" + backgroundColour + ";color:" + textColour + ";");
             calcDiv.innerHTML = `            
             <div class="title-and-logo">
                 <div class="title">
@@ -95,12 +101,83 @@ require('./lib/nouislider.js');
                     <img src="` + logoImageUrl + `">
                 </div>
             </div>
+            <div class="field price">
+                <label for="item_price">1. Item price</label>
+                <input type="text" id='item_price' placeholder='£' min="1000" max="1000000" inputmode="numeric" maxlength="12" value="` + itemPrice + `" style="color:` + textColour + `">
+            </div>
+            <div class="field price">
+                <label for="borrowing_amount">2. Borrowing amount <span>(based on a ` + borrowingAmount + `% deposit)</span></label>
+                <input type="text" id='borrowing_amount' placeholder='£' min="1000" max="1000000" inputmode="numeric" maxlength="12" value="` + itemBorrowingAmount + `" style="color:` + textColour + `">
+            </div>
+            <div class="field months">
+                <label>3. For how many months?</label>
+                <div class='month-options'>
+                    <div class='month' data-months='24' style="color:` + accentColour + `;border-color:` + textColour + `">
+                        24
+                        <span style="color:` + textColour + `">months</span>
+                    </div>
+                    <div class='month' data-months='36' style="color:` + accentColour + `;border-color:` + textColour + `">
+                        36
+                        <span style="color:` + textColour + `">months</span>
+                    </div>
+                    <div class='month' data-months='48' style="color:` + accentColour + `;border-color:` + textColour + `">
+                        48
+                        <span style="color:` + textColour + `">months</span>
+                    </div>
+                    <div class='month' data-months='60' style="color:` + accentColour + `;border-color:` + textColour + `">
+                        60
+                        <span style="color:` + textColour + `">months</span>
+                    </div>
+                    <div class='month' data-months='72' style="color:` + accentColour + `;border-color:` + textColour + `">
+                        72
+                        <span style="color:` + textColour + `">months</span>
+                    </div>
+                </div>
+            </div>
+            <div class="field credit-profile">
+                <label>4. Select your credit profile</label>
+                <input type="range" id="credit_profile" name="credit_profile" 
+                min="` + minInterestRate * 100 + `" max="` + maxInterestRate * 100 + `" value="0" step="0.1">
+                <div class="credit-profile-labels">                    
+                    <span>Poor</span>
+                    <span>Below average</span>                    
+                    <span>Average</span>
+                    <span>Good</span>
+                    <span>Exceptional</span>
+                </div>
+            </div>
+            <div id="donut-chart"></div>
+            <div class="results">
+                <div class='result-row' style="border-bottom-color:` + textColour + `7F;">
+                    <span class='label'>Total payable</span>
+                    <span class='amount'>` + totalPayable + `</span>
+                </div>
+                <div class='result-row' style="border-bottom-color:` + textColour + `7F;">
+                    <span class='label'>Monthly payment</span>
+                    <span class='amount'>` + monthlyPayment + `</span>
+                </div>
+            </div>
+            <div class='tooltip'>
+                For illustration purposes only. Our experts will calculate the rate you may be offered based on your individual circumstances. This is not an offer or quote for your finance.
+            </div>
+            <button class='button submit' style="background-color:` + accentColour + `;color:` + backgroundColour + `">Submit enquiry</button>
+            <div class='footer'>
+                <div class='top'>
+                    Powered by Portman. Personal, professional finance for UK Businesses
+                </div>
+                <div class='bottom'>
+                    Portman Finance Group includes Portman Asset Finance Limited (Reg No: 06226530) who is authorised and regulated by the Financial Conduct Authority for its credit broking activities and who deals with a panel of lenders (FRN: 719988), Portman Leasing Limited (Reg No: 06797365) authorised and regulated by the Financial Conduct for Consumer Hire lending (FRN: 723730) and Portman Commercial Finance Limited (Reg No: 10011121). The companies within Portman Finance Group are all registered in England and Wales with registered office: 1 Pavilion Court, 600 Pavilion Drive, Northampton, NN4 7SL
+                </div>
+            </div>
+        
             `;
             document.body.appendChild(calcDiv);
 
             var overlay = document.createElement('div');
             overlay.id = 'portman-overlay';
             document.body.appendChild(overlay);
+
+           
         }, 
 
         events: function() {
@@ -118,6 +195,19 @@ require('./lib/nouislider.js');
                     scope.build(itemPrice, borrowingAmount, minInterestRate, maxInterestRate, submitUrl);
 
                     scope.showCalculator();
+                    var donutData = {
+                        total: 70000,
+                        wedges: [
+                            { id: 'a', color: scope.config.accent_colour_one, value: 50000 },
+                            { id: 'b', color: scope.config.accent_colour_two, value: 20000 },
+                        ]
+                    };
+            
+                    var Donut = Object.create(DonutChart);
+                    Donut.init({
+                        container: document.getElementById('donut-chart'),
+                        data: donutData
+                    });
 
                 } , false);
             }            
