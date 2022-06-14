@@ -7,7 +7,6 @@ require('./lib/donut-chart.js');
   */
 
  ;(function(window, document, undefined) {
-    require('./lib/nouislider.js');
     'use strict';
   
     var PortmanCalculator = PortmanCalculator || {
@@ -70,13 +69,18 @@ require('./lib/donut-chart.js');
             var textColour = this.config.text_colour;
             var accentColour = this.config.accent_colour_one;
             var accentColourTwo = this.config.accent_colour_two;
+
             var utmSource = this.config.utm_source;
             var utmMedium = this.config.utm_medium;
             var utmCampaign = this.config.utm_campaign;
 
             var itemBorrowingAmount = itemPrice * (borrowingAmount / 100);
-            var totalPayable = '';
-            var monthlyPayment = '';
+            var deposit = 100 - parseInt(borrowingAmount);
+
+            var midInterestRate = (((maxInterestRate - minInterestRate) / 2) + minInterestRate) * 100;
+
+            var formattedItemPrice = this.formatCurrency(itemPrice);
+            var formattedBorrowingAmount = this.formatCurrency(itemBorrowingAmount);
 
             var calcDiv = document.getElementById("portman-calculator");
             if (calcDiv) {
@@ -87,6 +91,7 @@ require('./lib/donut-chart.js');
             if (overlay) {
                 overlay.remove();
             }
+
             
             var calcDiv = document.createElement('div');
             calcDiv.id = 'portman-calculator';
@@ -102,16 +107,16 @@ require('./lib/donut-chart.js');
                 </div>
             </div>
             <div class="field price">
-                <label for="item_price">1. Item price</label>
-                <input type="text" id='item_price' placeholder='£' min="1000" max="1000000" inputmode="numeric" maxlength="12" value="` + itemPrice + `" style="color:` + textColour + `">
+                <label for="portman_item_price">1. Item price</label>
+                <input type="text" id='portman_item_price' placeholder='£' min="1000" max="1000000" inputmode="numeric" maxlength="12" value="` + formattedItemPrice + `" data-borrowing-amount="` + borrowingAmount + `" style="color:` + textColour + `;border-color:` + textColour + `" inputmode="numeric" maxlength="12">
             </div>
             <div class="field price">
-                <label for="borrowing_amount">2. Borrowing amount <span>(based on a ` + borrowingAmount + `% deposit)</span></label>
-                <input type="text" id='borrowing_amount' placeholder='£' min="1000" max="1000000" inputmode="numeric" maxlength="12" value="` + itemBorrowingAmount + `" style="color:` + textColour + `">
+                <label for="portman_borrowing_amount">2. Borrowing amount <span>(based on a ` + deposit + `% deposit)</span></label>
+                <input type="text" id='portman_borrowing_amount' placeholder='£' min="1000" max="1000000" inputmode="numeric" maxlength="12" value="` + formattedBorrowingAmount + `" style="color:` + textColour + `;border-color:` + textColour + `" inputmode="numeric" maxlength="12">
             </div>
             <div class="field months">
                 <label>3. For how many months?</label>
-                <div class='month-options'>
+                <div class='portman-month-options'>
                     <div class='month' data-months='24' style="color:` + accentColour + `;border-color:` + textColour + `">
                         24
                         <span style="color:` + textColour + `">months</span>
@@ -128,7 +133,7 @@ require('./lib/donut-chart.js');
                         60
                         <span style="color:` + textColour + `">months</span>
                     </div>
-                    <div class='month' data-months='72' style="color:` + accentColour + `;border-color:` + textColour + `">
+                    <div class='month active' data-months='72' style="color:` + accentColour + `;border-color:` + textColour + `">
                         72
                         <span style="color:` + textColour + `">months</span>
                     </div>
@@ -136,25 +141,38 @@ require('./lib/donut-chart.js');
             </div>
             <div class="field credit-profile">
                 <label>4. Select your credit profile</label>
-                <input type="range" id="credit_profile" name="credit_profile" 
-                min="` + minInterestRate * 100 + `" max="` + maxInterestRate * 100 + `" value="0" step="0.1">
-                <div class="credit-profile-labels">                    
-                    <span>Poor</span>
-                    <span>Below average</span>                    
-                    <span>Average</span>
-                    <span>Good</span>
+                <input type="range" id="portman_credit_profile" name="portman_credit_profile" 
+                min="` + minInterestRate * 100 + `" max="` + maxInterestRate * 100 + `" value="` + midInterestRate + `" step="0.1">
+                <div class="credit-profile-labels">  
                     <span>Exceptional</span>
+                    <span>Good</span>
+                    <span>Average</span>
+                    <span>Below average</span>
+                    <span>Poor</span>
                 </div>
             </div>
-            <div id="donut-chart"></div>
+            <div class='donut-container'>
+                <div id="donut-chart"></div>
+                <div class='key'>
+                    <div class='key-line'>
+                        <div class='circle' style="background:` + accentColour + `"></div>
+                        Borrowing
+                    </div>
+                    <div class='key-line'>
+                        <div class='circle' style="background:` + accentColourTwo + `"></div>
+                        Interest
+                    </div>
+                </div>
+            </div>
+            
             <div class="results">
                 <div class='result-row' style="border-bottom-color:` + textColour + `7F;">
                     <span class='label'>Total payable</span>
-                    <span class='amount'>` + totalPayable + `</span>
+                    <span class='amount' id='portman_total_payable'></span>
                 </div>
                 <div class='result-row' style="border-bottom-color:` + textColour + `7F;">
                     <span class='label'>Monthly payment</span>
-                    <span class='amount'>` + monthlyPayment + `</span>
+                    <span class='amount' id='portman_monthly_payment'></span>
                 </div>
             </div>
             <div class='tooltip'>
@@ -176,8 +194,6 @@ require('./lib/donut-chart.js');
             var overlay = document.createElement('div');
             overlay.id = 'portman-overlay';
             document.body.appendChild(overlay);
-
-           
         }, 
 
         events: function() {
@@ -195,22 +211,52 @@ require('./lib/donut-chart.js');
                     scope.build(itemPrice, borrowingAmount, minInterestRate, maxInterestRate, submitUrl);
 
                     scope.showCalculator();
-                    var donutData = {
-                        total: 70000,
-                        wedges: [
-                            { id: 'a', color: scope.config.accent_colour_one, value: 50000 },
-                            { id: 'b', color: scope.config.accent_colour_two, value: 20000 },
-                        ]
-                    };
-            
-                    var Donut = Object.create(DonutChart);
-                    Donut.init({
-                        container: document.getElementById('donut-chart'),
-                        data: donutData
-                    });
+                    scope.updateDonut();
 
                 } , false);
-            }            
+            }
+
+            document.body.addEventListener("click", function (e) {
+                if (e.path[0].classList.contains("month") && e.path[0].parentNode.classList.contains('portman-month-options')) {
+                    var monthButtons = document.querySelectorAll("#portman-calculator .portman-month-options .month");
+
+                    for (var i = 0; i < monthButtons.length; i++) {
+                        monthButtons[i].classList.remove('active');
+                    }
+                    
+                    e.path[0].classList.add('active');
+
+                    scope.updateDonut();
+                }
+
+                if (e.path[0].id == 'portman-overlay') {
+                    scope.hideCalculator();
+                }
+            });
+
+            
+            window.addEventListener('change', function (event) { 
+                
+                var inputTarget = event.path[0];
+                if (inputTarget.id == 'portman_item_price') {
+                    var borrowingAmount = inputTarget.getAttribute('data-borrowing-amount');
+                    var newBorrowingAmount = inputTarget.value * (borrowingAmount / 100);
+                    document.getElementById('portman_borrowing_amount').value = scope.formatCurrency(Math.floor(newBorrowingAmount));
+                    scope.updateDonut();
+
+                    inputTarget.value = scope.formatCurrency(inputTarget.value);
+                }
+
+                if (inputTarget.id == 'portman_borrowing_amount') {
+                    scope.updateDonut();
+                    inputTarget.value = scope.formatCurrency(inputTarget.value);
+                }
+
+                if (inputTarget.id == 'portman_credit_profile') {
+                    scope.updateDonut();
+                }
+
+            })
         },
 
         showCalculator: function() {
@@ -225,6 +271,57 @@ require('./lib/donut-chart.js');
             }
         },
 
+        updateDonut: function() {
+            var borrowingAmount = this.unFormatCurrency(document.getElementById('portman_borrowing_amount').value);
+
+            if (borrowingAmount > 0) {
+                var months = document.querySelectorAll("#portman-calculator .portman-month-options .month.active")[0].getAttribute('data-months');
+                var interestRate = (document.getElementById('portman_credit_profile').value) / 100;
+    
+                var years = months / 12;
+    
+                var interest = 1 + (interestRate * years);
+                var totalPayment = borrowingAmount * interest;
+    
+                var perMonthTotal = totalPayment / months;
+                var perMonth = borrowingAmount / months;
+                var interestPerMonth = perMonthTotal - perMonth;
+    
+                perMonth = perMonth.toFixed(2);
+                perMonthTotal = perMonthTotal.toFixed(2);
+                totalPayment = totalPayment.toFixed(2);
+    
+                var donutExists = document.querySelectorAll("#portman-calculator #donut-chart .inner-circle")[0];
+    
+                var donutData = {
+                    total: perMonthTotal,
+                    wedges: [
+                        { id: 'a', color: this.config.accent_colour_one, value: perMonth },
+                        { id: 'b', color: this.config.accent_colour_two, value: interestPerMonth },
+                    ]
+                };
+        
+                var Donut = Object.create(DonutChart);
+    
+                if (donutExists) {
+                    Donut.update({
+                        container: document.getElementById('donut-chart'),
+                        data: donutData
+                    });
+                }
+                else {        
+                    Donut.init({
+                        container: document.getElementById('donut-chart'),
+                        data: donutData
+                    });
+                }
+                
+                document.getElementById('portman_total_payable').innerHTML = this.formatCurrency(totalPayment);
+                document.getElementById('portman_monthly_payment').innerHTML = this.formatCurrency(perMonthTotal);
+            }
+            
+        },
+
         hideCalculator: function() {
             var calcDiv = document.getElementById("portman-calculator");
             if (calcDiv) {
@@ -234,6 +331,35 @@ require('./lib/donut-chart.js');
             var overlay = document.getElementById("portman-overlay");
             if (overlay) {
                 overlay.classList.remove("active");
+            }
+        },
+
+        formatCurrency: function(number) {
+            number = parseFloat(number) || "0";
+            if (number) {
+                try {
+                    return new Intl.NumberFormat('en-EN', { style: 'currency', currency: 'GBP' }).format(number);
+                }
+                catch (ex) {
+                    return '';
+                }
+                
+            }
+            
+        },
+
+        unFormatCurrency: function(value) {
+            if (value) {
+                var justNumbers = value.toString().replace(/[,£]/g, "");
+                if (justNumbers) {
+                    return parseFloat(justNumbers) || 0;;
+                }
+                else {
+                    return '';
+                }
+            }
+            else {
+                return '';
             }
         },
 

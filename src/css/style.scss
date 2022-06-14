@@ -1,8 +1,10 @@
+$form-border: #404448;
+
 @import 'mixins.scss';
 @import 'lib/donut.scss';
 @import 'lib/nouislider.scss';
 
-$form-border: #97A7B5;
+
 
 #portman-overlay {
     position: fixed;
@@ -21,6 +23,7 @@ $form-border: #97A7B5;
 #portman-calculator {
     position: fixed;
     background: white;
+    border-radius: 8px;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
@@ -28,10 +31,12 @@ $form-border: #97A7B5;
     display: none;
     max-height: 80vh;
     overflow: auto;
+    box-shadow: 0px 0px 40px rgba(0, 0, 0, 0.25);
+    padding: 2em;
     &.active {
         display: block;
     }
-    padding: 1em;
+    
     .title-and-logo {
         display: flex;
         justify-content: space-around;
@@ -42,7 +47,7 @@ $form-border: #97A7B5;
         }
         .logo {
             img {
-                max-height: 3em;
+                height: 3em;
             }            
         }
     }
@@ -66,8 +71,12 @@ $form-border: #97A7B5;
                 color: white;
             }
             &:focus {
-                background: rgba(white, 0.25);
+                background: $form-border;
             }
+            &:focus-visible {
+                outline: none;
+            }
+
         }
          
     }
@@ -82,7 +91,7 @@ $form-border: #97A7B5;
             cursor: pointer;
         }
     }
-    .month-options {
+    .portman-month-options {
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;
@@ -104,6 +113,9 @@ $form-border: #97A7B5;
             &:hover {
                 cursor: pointer;
             }
+            &.active {
+                background: $form-border;
+            }
         }
     }
     .credit-profile-labels {
@@ -111,6 +123,29 @@ $form-border: #97A7B5;
         align-items: center;
         justify-content: space-between;
         font-size: 0.75em;
+    }
+    .donut-container {
+        position: relative;
+        padding: 1em 0em;
+        .key {
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding-top: 1em;
+            .key-line {
+                font-weight: bold;
+                padding-bottom: 0.5em;
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;
+                .circle {
+                    width: 1em;
+                    height: 1em;
+                    border-radius: 50%;
+                    margin-right: 0.5em;
+                }
+            }
+        }
     }
     .results {
         .result-row {
