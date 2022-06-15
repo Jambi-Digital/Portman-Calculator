@@ -67,7 +67,7 @@ Here's an example of the init() function showing all available options:
         borrowing_amount: 90,
         min_interest_rate: 3.9,
         max_interest_rate: 9.9,
-        submit_url: 'https://portmanassetfinance.com#form',
+        submit_url: 'https://portmanassetfinance.com',
         logo_image_url: 'https://www.portmanassetfinance.co.uk/calculator/default-logo.svg',
         background_colour: '#0e212f',
         text_colour: '#ffffff',
@@ -100,6 +100,6 @@ All the options labelled as overridable in Step 2 can be overridden in this way.
       portman-calculator-borrowing-amount='75'
       portman-calculator-min-interest-rate='4.5' 
       portman-calculator-max-interest-rate='12.5' 
-      portman-calculator-submit-url='https://portmanassetfinance.co.uk/your-landing-page#form' >
+      portman-calculator-submit-url='https://portmanassetfinance.co.uk/your-landing-page' >
         View financing options
     </button>
