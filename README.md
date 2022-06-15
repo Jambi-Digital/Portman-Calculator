@@ -9,7 +9,16 @@ To get started your website will need to reference the JavaScript file CSS liste
     <link rel='stylesheet' href='https://cdn.jsdelivr.net/gh/Jambi-Digital/Portman-Calculator@main/dist/portman-calculator.min.css'>
     <script type='text/javascript' src='https://cdn.jsdelivr.net/gh/Jambi-Digital/Portman-Calculator@main/dist/portman-calculator.min.js' async='async'></script>
 
-There are no other dependencies at this time
+If JsDelivr are only serving out-of-date files and you need to bypass the cache, you can get the most up to date files here:
+
+    <link rel='stylesheet' href='https://portmanassetfinance.co.uk/calculator/portman-calculator.min.css'>
+    <script type='text/javascript' src='https://portmanassetfinance.co.uk/calculator/portman-calculator.min.js' async='async'></script>
+
+The files hosted on portmanassetfinance.co.uk will be removed prior to launch. 
+
+There are no other dependencies at this time.
+
+---
 
 # Getting Started
 
