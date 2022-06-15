@@ -16,7 +16,7 @@ require('./lib/donut-chart.js');
             this.settings(options);       
             this.build();
             this.events();
-            this.dump();
+            // this.dump();
         },  
 
         defaults: function() {
@@ -24,7 +24,7 @@ require('./lib/donut-chart.js');
                 borrowing_amount: 90,
                 min_interest_rate: 3.9,
                 max_interest_rate: 9.9,
-                submit_url: 'https://portmanassetfinance.com#form',
+                submit_url: 'https://portmanassetfinance.co.uk',
                 logo_image_url: 'https://www.portmanassetfinance.co.uk/calculator/default-logo.svg',
                 background_colour: '#0e212f',
                 text_colour: '#ffffff',
@@ -62,7 +62,7 @@ require('./lib/donut-chart.js');
             var borrowingAmount = borrowingAmount ? borrowingAmount : this.config.borrowing_amount;
             var minInterestRate = minInterestRate ? minInterestRate : this.config.min_interest_rate;
             var maxInterestRate = maxInterestRate ? maxInterestRate : this.config.max_interest_rate;
-            var submitUrl = submitUrl ? submitUrl : this.config.submitUrl;
+            var submitUrl = submitUrl ? submitUrl : this.config.submit_url;
             
             var logoImageUrl = this.config.logo_image_url;
             var backgroundColour = this.config.background_colour;
@@ -77,7 +77,7 @@ require('./lib/donut-chart.js');
             var itemBorrowingAmount = itemPrice * (borrowingAmount / 100);
             var deposit = 100 - parseInt(borrowingAmount);
 
-            var midInterestRate = ((maxInterestRate - minInterestRate) / 2) + minInterestRate;
+            var midInterestRate = (parseInt(maxInterestRate) + parseInt(minInterestRate)) / 2;
 
             var formattedItemPrice = this.formatCurrency(itemPrice);
             var formattedBorrowingAmount = this.formatCurrency(itemBorrowingAmount);
@@ -97,7 +97,8 @@ require('./lib/donut-chart.js');
             calcDiv.id = 'portman-calculator';
             // calcDiv.style.cssText = 'background-color:"' + backgroundColour + ';"';
             calcDiv.setAttribute("style", "background-color:" + backgroundColour + ";color:" + textColour + ";");
-            calcDiv.innerHTML = `            
+            calcDiv.innerHTML = `
+            <img src='https://portmanassetfinance.co.uk/calculator/close-icon.svg' id='portman-close-icon'>
             <div class="title-and-logo">
                 <div class="title">
                     Finance Calculator
@@ -178,7 +179,7 @@ require('./lib/donut-chart.js');
             <div class='tooltip'>
                 For illustration purposes only. Our experts will calculate the rate you may be offered based on your individual circumstances. This is not an offer or quote for your finance.
             </div>
-            <button class='button submit' style="background-color:` + accentColour + `;color:` + backgroundColour + `">Submit enquiry</button>
+            <button id='portman-submit' style="background-color:` + accentColour + `;color:` + backgroundColour + `" data-submit-url="` + submitUrl + `" data-utm-source="` + utmSource + `" data-utm-campaign="` + utmCampaign + `" data-utm-medium="` + utmMedium + `">Submit enquiry</button>
             <div class='footer'>
                 <div class='top'>
                     Powered by Portman. Personal, professional finance for UK Businesses
@@ -216,20 +217,31 @@ require('./lib/donut-chart.js');
                 } , false);
             }
 
-            document.body.addEventListener("click", function (e) {
-                if (e.path[0].classList.contains("month") && e.path[0].parentNode.classList.contains('portman-month-options')) {
+            document.body.addEventListener("click", function (event) {
+
+                var inputTarget = event.path[0];
+
+                if (inputTarget.classList.contains("month") && inputTarget.parentNode.classList.contains('portman-month-options')) {
                     var monthButtons = document.querySelectorAll("#portman-calculator .portman-month-options .month");
 
                     for (var i = 0; i < monthButtons.length; i++) {
                         monthButtons[i].classList.remove('active');
                     }
                     
-                    e.path[0].classList.add('active');
+                    inputTarget.classList.add('active');
 
                     scope.updateDonut();
                 }
 
-                if (e.path[0].id == 'portman-overlay') {
+                if (inputTarget.id == 'portman-overlay') {
+                    scope.hideCalculator();
+                }
+
+                if (inputTarget.id == 'portman-submit') {
+                    scope.submitForm(inputTarget);
+                    scope.hideCalculator();
+                }
+                if (inputTarget.id == 'portman-close-icon') {
                     scope.hideCalculator();
                 }
             });
@@ -257,19 +269,7 @@ require('./lib/donut-chart.js');
                 }
 
             })
-        },
-
-        showCalculator: function() {
-            var calcDiv = document.getElementById("portman-calculator");
-            if (calcDiv) {
-                calcDiv.classList.add("active");
-            }
-
-            var overlay = document.getElementById("portman-overlay");
-            if (overlay) {
-                overlay.classList.add("active");
-            }
-        },
+        },        
 
         updateDonut: function() {
             var borrowingAmount = this.unFormatCurrency(document.getElementById('portman_borrowing_amount').value);
@@ -319,7 +319,32 @@ require('./lib/donut-chart.js');
                 document.getElementById('portman_total_payable').innerHTML = this.formatCurrency(totalPayment);
                 document.getElementById('portman_monthly_payment').innerHTML = this.formatCurrency(perMonthTotal);
             }
-            
+        },
+
+        submitForm: function(submitButton) {
+            var submitUrl = submitButton.getAttribute("data-submit-url");
+            var utmSource = submitButton.getAttribute("data-utm-source");
+            var utmMedium = submitButton.getAttribute("data-utm-medium");
+            var utmCampaign = submitButton.getAttribute("data-utm-campaign");
+            var amount = this.unFormatCurrency(document.getElementById('portman_borrowing_amount').value);
+
+            if (submitUrl && utmSource && utmMedium && utmCampaign) {
+                var redirectUrl = submitUrl + '?utm-source=' + utmSource + '&utm-medium=' + utmMedium + '&utm-campaign=' + utmCampaign + '&amount=' + amount;
+                window.location = redirectUrl;
+            }
+
+        },
+
+        showCalculator: function() {
+            var calcDiv = document.getElementById("portman-calculator");
+            if (calcDiv) {
+                calcDiv.classList.add("active");
+            }
+
+            var overlay = document.getElementById("portman-overlay");
+            if (overlay) {
+                overlay.classList.add("active");
+            }
         },
 
         hideCalculator: function() {
