@@ -46,12 +46,8 @@ There are also other options available, listed here:
 | Field ID            | Explaination                                                                                                                                    | Default                                                           | Expected input            | Overridable |
 |---------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------|---------------------------|-------------|
 | borrowing_amount    | This is the default borrowing amount as a percentage shown on the calculator                                                                    | 90                                                                | Integer between 0 and 100 | Yes         |
-| min_interest_amount | The minimum interest rate                                                                                                                       | 3.9                                                               | Decimal                   | Yes         |
-| max_interest_rate   | The maximum interest rate                                                                                                                       | 9.9                                                               | Decimal                   | Yes         |
 | submit_url          | This is the page that loads up once the calculator is submitted. Portman Asset Finance may request you change this to a particular landing page | https://portmanassetfinance.co.uk                              | String                    | Yes         |
 | logo_url            | The source path of the logo that is shown at the top of the calculator                                                                          | https://www.portmanassetfinance.co.uk/calculator/default-logo.svg | String                    | No         |
-| background_colour   | The background colour of the calculator                                                                                                         | #0e212f                                                           | HEX code                  | No          |
-| text_colour         | The colour of text on the calculator                                                                                                            | #ffffff                                                           | HEX code                  | No          |
 | accent_colour_one   | First accent colour                                                                                                                             | #00dcb4                                                           | HEX code                  | No          |
 | accent_colour_two   | Second accent colour                                                                                                                            | #4747F5                                                           | HEX code                  | No          |
 | utm_source          | UTM source field                                                                                                                                | None - required field                                             | String                    | No          |
@@ -65,12 +61,8 @@ Here's an example of the init() function showing all available options:
         utm_medium: 'Your UTM Medium value',
         utm_campaign: 'Your UTM Campaign value',
         borrowing_amount: 90,
-        min_interest_rate: 3.9,
-        max_interest_rate: 9.9,
         submit_url: 'https://portmanassetfinance.com',
         logo_image_url: 'https://www.portmanassetfinance.co.uk/calculator/default-logo.svg',
-        background_colour: '#0e212f',
-        text_colour: '#ffffff',
         accent_colour_one: '#00dcb4',
         accent_colour_two: '#184363',
     });
@@ -98,8 +90,6 @@ All the options labelled as overridable in Step 2 can be overridden in this way.
     <button class="portman-calculator" 
       portman-calculator-item-price='{{ $itemPrice }}' 
       portman-calculator-borrowing-amount='75'
-      portman-calculator-min-interest-rate='4.5' 
-      portman-calculator-max-interest-rate='12.5' 
       portman-calculator-submit-url='https://portmanassetfinance.co.uk/your-landing-page' >
         View financing options
     </button>
