@@ -27,6 +27,7 @@ $green: #00dcb4;
     position: fixed;
     background: $blue;
     font-family: 'Roboto', sans-serif;
+    font-size: 16px;
     color: white;
     border-radius: 8px;
     left: 50%;
@@ -35,7 +36,7 @@ $green: #00dcb4;
     z-index: 1000;
     display: none;
     max-height: 80vh;
-    max-width: 650px;
+    max-width: 550px;
     overflow: auto;
     box-shadow: 0px 0px 40px rgba(0, 0, 0, 0.25);
     padding: 2em;
@@ -64,7 +65,7 @@ $green: #00dcb4;
             }
         }
         .title {
-            font-size: 2em;
+            font-size: 1.5em;
         }
         .logo {
             img {

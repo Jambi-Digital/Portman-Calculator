@@ -22,8 +22,6 @@ require('./lib/donut-chart.js');
         defaults: function() {
             this.defaults = {
                 borrowing_amount: 90,
-                min_interest_rate: 3.9,
-                max_interest_rate: 9.9,
                 submit_url: 'https://portmanassetfinance.co.uk',
                 logo_image_url: 'https://www.portmanassetfinance.co.uk/calculator/default-logo.svg',
                 accent_colour_one: '#00dcb4',
@@ -35,8 +33,6 @@ require('./lib/donut-chart.js');
             if (options.utm_source && options.utm_medium && options.utm_campaign) {
                 this.config = {
                     borrowing_amount: options.borrowing_amount ? options.borrowing_amount : this.defaults.borrowing_amount,
-                    min_interest_rate: options.min_interest_rate ? options.min_interest_rate : this.defaults.min_interest_rate,
-                    max_interest_rate: options.max_interest_rate ? options.max_interest_rate : this.defaults.max_interest_rate,
                     submit_url: options.submit_url ? options.submit_url : this.defaults.submit_url,
                     logo_image_url: options.logo_image_url ? options.logo_image_url : this.defaults.logo_image_url,
                     accent_colour_one: options.accent_colour_one ? options.accent_colour_one : this.defaults.accent_colour_one,
@@ -53,11 +49,9 @@ require('./lib/donut-chart.js');
     
         },
 
-        build: function(itemPrice = false, borrowingAmount = false, minInterestRate = false, maxInterestRate = false, submitUrl = false) {      
+        build: function(itemPrice = false, borrowingAmount = false, submitUrl = false) {      
             var itemPrice = itemPrice ? itemPrice : '';
             var borrowingAmount = borrowingAmount ? borrowingAmount : this.config.borrowing_amount;
-            var minInterestRate = minInterestRate ? minInterestRate : this.config.min_interest_rate;
-            var maxInterestRate = maxInterestRate ? maxInterestRate : this.config.max_interest_rate;
             var submitUrl = submitUrl ? submitUrl : this.config.submit_url;
             
             var logoImageUrl = this.config.logo_image_url;
@@ -70,8 +64,6 @@ require('./lib/donut-chart.js');
 
             var itemBorrowingAmount = itemPrice * (borrowingAmount / 100);
             var deposit = 100 - parseInt(borrowingAmount);
-
-            var midInterestRate = (parseInt(maxInterestRate) + parseInt(minInterestRate)) / 2;
 
             var formattedItemPrice = this.formatCurrency(itemPrice);
             var formattedBorrowingAmount = this.formatCurrency(itemBorrowingAmount);
@@ -135,7 +127,7 @@ require('./lib/donut-chart.js');
             <div class="field credit-profile">
                 <label>4. Select your credit profile</label>
                 <input type="range" id="portman_credit_profile" name="portman_credit_profile" 
-                min="` + minInterestRate + `" max="` + maxInterestRate + `" value="` + minInterestRate + `" step="0.1">
+                min="3.9" max="14.9" value="3.9" step="0.1">
                 <div class="credit-profile-labels">  
                     <span>Exceptional</span>
                     <span>Good</span>
@@ -219,11 +211,9 @@ require('./lib/donut-chart.js');
                 calculatorButtons[i].addEventListener('click', function() {
                     var itemPrice = this.getAttribute("portman-calculator-item-price");
                     var borrowingAmount = this.getAttribute("portman-calculator-borrowing-amount");
-                    var minInterestRate = this.getAttribute("portman-calculator-min-interest-rate");
-                    var maxInterestRate = this.getAttribute("portman-calculator-max-interest-rate");
                     var submitUrl = this.getAttribute("portman-calculator-submit-url");
 
-                    scope.build(itemPrice, borrowingAmount, minInterestRate, maxInterestRate, submitUrl);
+                    scope.build(itemPrice, borrowingAmount, submitUrl);
 
                     scope.showCalculator();
                     scope.updateDonut();
@@ -340,7 +330,7 @@ require('./lib/donut-chart.js');
             var utmSource = submitButton.getAttribute("data-utm-source");
             var utmMedium = submitButton.getAttribute("data-utm-medium");
             var utmCampaign = submitButton.getAttribute("data-utm-campaign");
-            var amount = this.unFormatCurrency(document.getElementById('portman_borrowing_amount').value);
+            var amount = this.unFormatCurrency(document.getElementById('portman_item_price').value);
 
             if (submitUrl && utmSource && utmMedium && utmCampaign) {
                 var redirectUrl = submitUrl + '?utm-source=' + utmSource + '&utm-medium=' + utmMedium + '&utm-campaign=' + utmCampaign + '&amount=' + amount;
@@ -404,8 +394,6 @@ require('./lib/donut-chart.js');
 
         dump: function() {
             console.log(this.config.borrowing_amount);
-            console.log(this.config.min_interest_rate);
-            console.log(this.config.max_interest_rate);
             console.log(this.config.submit_url);
             console.log(this.config.logo_image_url);
             console.log(this.config.accent_colour_one);
