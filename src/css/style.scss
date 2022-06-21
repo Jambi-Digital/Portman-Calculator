@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
 $form-border: #404448;
 $blue: #182C3B;
 $green: #00dcb4;
@@ -194,10 +195,20 @@ $green: #00dcb4;
             padding: 0.5rem 0;
             border-bottom-width: 1px;
             border-bottom-style: solid;
-
+            &.total {
+                .label, .amount {
+                    font-size: 1em;
+                }
+                
+            }
+            &.monthly {
+                .label, .amount {
+                    font-size: 1.5em;
+                }
+                
+            }
             .label {
                 font-weight: bold;
-                font-size: 1.5em;
             }
         }
     }
