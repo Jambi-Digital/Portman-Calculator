@@ -1,4 +1,6 @@
 $form-border: #404448;
+$blue: #182C3B;
+$green: #00dcb4;
 
 @import 'mixins.scss';
 @import 'lib/donut.scss';
@@ -22,7 +24,9 @@ $form-border: #404448;
 
 #portman-calculator {
     position: fixed;
-    background: white;
+    background: $blue;
+    font-family: 'Roboto', sans-serif;
+    color: white;
     border-radius: 8px;
     left: 50%;
     top: 50%;
@@ -78,7 +82,8 @@ $form-border: #404448;
             display: block;
         }
         input[type=text] {
-            border: 1px solid $form-border;
+            border: 1px solid rgba(white, 0.5);
+            color: white;
             background: transparent;
             border-radius: 6px;
             margin-bottom: 0px;
@@ -90,7 +95,7 @@ $form-border: #404448;
                 color: white;
             }
             &:focus {
-                background: $form-border;
+                background: rgba(white, 0.5);
             }
             &:focus-visible {
                 outline: none;
@@ -125,15 +130,22 @@ $form-border: #404448;
             border-width: 1px;
             border-radius: 6px;
             border-style: solid;
+            border-color: white;
             padding: 0.5rem;
+            color: $green;
             span {
                 font-size: 0.75rem;
+                color: white;
             }
             &:hover {
                 cursor: pointer;
             }
             &.active {
-                background: $form-border;
+                background: white;
+                color: $blue !important;
+                span {
+                    color: $blue !important;
+                }
             }
         }
     }
@@ -193,6 +205,13 @@ $form-border: #404448;
         opacity: 0.75;
         font-size: 0.75rem;
         padding: 1em 0;
+        display: flex;
+        align-items: center;
+        svg {
+            width: 40px;
+            height: 40px;
+            margin-right: 20px;
+        }
     }
     .footer {
         .top {
