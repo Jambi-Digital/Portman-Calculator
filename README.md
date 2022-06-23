@@ -67,15 +67,15 @@ Here's an example of the init() function showing all available options:
         accent_colour_two: '#184363',
     });
 
-## Step three - hooking the calculator to a button
+## Step three - hooking the calculator to an element
 
-Once the calculator is initialised we'll need to decorate the buttons we want to show the calculator when clicked with a bit of code. 
+Once the calculator is initialised we'll need to decorate the elements we want to show the calculator when clicked. 
 
-The button needs to have the class 'portman-calculator' and have an attribute named 'portman-calculator-item-price'. Here's an example: 
+The element needs to have the class 'portman-calculator' and have an attribute named 'portman-calculator-item-price'. Here's an example: 
 
     <button class="portman-calculator" portman-calculator-item-price='{{ $itemPrice }}' >View financing options</button>
 
-The item-price needs to be injected into the HTML markup as an integer, not a string. So '100000' rather than '£100,000'. 
+The item-price needs to be injected into the HTML markup as an integer or float, not a string. So '100000' or '100000.00' rather than '£100,000'. 
 
 There is also an optional 'item name' field that can be added to each button. This has no affect on the calculator itself, but should a user click the 'get a quote' button on the calculator and complete the full eligibility checker form on the Portman website then this item name field will be sent to the Portman CRM system to improve the sales process. It can be added in exactly the same way as the item price:
 
