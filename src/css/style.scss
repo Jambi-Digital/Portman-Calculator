@@ -66,6 +66,7 @@ $green: #00dcb4;
         }
         .title {
             font-size: 1.5em;
+            font-weight: bold;
         }
         .logo {
             img {
@@ -230,6 +231,12 @@ $green: #00dcb4;
             margin-top: 1em;
             font-size: 1.25em;
             font-weight: bold;
+            line-height: 1.35em;
+            img {
+                display: inline-block;
+                height: 1.5em;
+                padding: 0 0.5em;
+            }
         }
     }
 }
