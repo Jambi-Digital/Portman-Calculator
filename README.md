@@ -93,6 +93,7 @@ All the options labelled as overridable in Step 2 can be overridden in this way.
 
     <button class="portman-calculator" 
       portman-calculator-item-price='{{ $itemPrice }}' 
+      portman-calculator-item-name='{{ $itemName }}' 
       portman-calculator-borrowing-amount='75'
       portman-calculator-submit-url='https://portmanassetfinance.co.uk/your-landing-page' >
         View financing options
