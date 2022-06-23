@@ -77,6 +77,10 @@ The button needs to have the class 'portman-calculator' and have an attribute na
 
 The item-price needs to be injected into the HTML markup as an integer, not a string. So '100000' rather than '£100,000'. 
 
+There is also an optional 'item name' field that can be added to each button. This has no affect on the calculator itself, but should a user click the 'get a quote' button on the calculator and complete the full eligibility checker form on the Portman website then this item name field will be sent to the Portman CRM system to improve the sales process. It can be added in exactly the same way as the item price:
+
+    <button class="portman-calculator" portman-calculator-item-price='{{ $itemPrice }}' portman-calculator-item-name='{{ $itemName }}' >View financing options</button>
+
 If this button is clicked the calculator will popup with the item price specified. 
 
 ## Step four - overriding global options
