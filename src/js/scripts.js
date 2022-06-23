@@ -49,7 +49,7 @@ require('./lib/donut-chart.js');
     
         },
 
-        build: function(itemPrice = false, borrowingAmount = false, submitUrl = false) {      
+        build: function(itemPrice = false, borrowingAmount = false, submitUrl = false, itemName = false) {      
             var itemPrice = itemPrice ? itemPrice : '';
             var borrowingAmount = borrowingAmount ? borrowingAmount : this.config.borrowing_amount;
             var submitUrl = submitUrl ? submitUrl : this.config.submit_url;
@@ -185,7 +185,7 @@ require('./lib/donut-chart.js');
             </svg>
                 For illustration purposes only. Our experts will calculate the rate you may be offered based on your individual circumstances. This is not an offer or quote for your finance.
             </div>
-            <button id='portman-submit' style="background-color:` + accentColour + `;" data-submit-url="` + submitUrl + `" data-utm-source="` + utmSource + `" data-utm-campaign="` + utmCampaign + `" data-utm-medium="` + utmMedium + `">Get a Quote</button>
+            <button id='portman-submit' style="background-color:` + accentColour + `;" data-submit-url="` + submitUrl + `" data-utm-source="` + utmSource + `" data-utm-campaign="` + utmCampaign + `" data-utm-medium="` + utmMedium + `" data-item-name="` + itemName + `">Get a Quote</button>
             <div class='footer'>
                 <div class='top'>
                     Powered by <img src='https://www.portmanassetfinance.co.uk/calculator/default-logo.svg' alt='Portman'> Personal, professional finance for UK Businesses
@@ -210,10 +210,11 @@ require('./lib/donut-chart.js');
             for (var i = 0; i < calculatorButtons.length; i++) {
                 calculatorButtons[i].addEventListener('click', function() {
                     var itemPrice = this.getAttribute("portman-calculator-item-price");
+                    var itemName = this.getAttribute("portman-calculator-item-name");
                     var borrowingAmount = this.getAttribute("portman-calculator-borrowing-amount");
                     var submitUrl = this.getAttribute("portman-calculator-submit-url");
 
-                    scope.build(itemPrice, borrowingAmount, submitUrl);
+                    scope.build(itemPrice, borrowingAmount, submitUrl, itemName);
 
                     scope.showCalculator();
                     scope.updateDonut();
@@ -330,10 +331,11 @@ require('./lib/donut-chart.js');
             var utmSource = submitButton.getAttribute("data-utm-source");
             var utmMedium = submitButton.getAttribute("data-utm-medium");
             var utmCampaign = submitButton.getAttribute("data-utm-campaign");
+            var itemName = submitButton.getAttribute("data-item-name");
             var amount = this.unFormatCurrency(document.getElementById('portman_item_price').value);
 
             if (submitUrl && utmSource && utmMedium && utmCampaign) {
-                var redirectUrl = submitUrl + '?utm-source=' + utmSource + '&utm-medium=' + utmMedium + '&utm-campaign=' + utmCampaign + '&amount=' + amount;
+                var redirectUrl = submitUrl + '?utm-source=' + utmSource + '&utm-medium=' + utmMedium + '&utm-campaign=' + utmCampaign + '&amount=' + amount + '&item-name=' + itemName;
                 window.location = redirectUrl;
             }
 
