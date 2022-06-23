@@ -335,7 +335,7 @@ require('./lib/donut-chart.js');
             var amount = this.unFormatCurrency(document.getElementById('portman_item_price').value);
 
             if (submitUrl && utmSource && utmMedium && utmCampaign) {
-                var redirectUrl = submitUrl + '?utm-source=' + utmSource + '&utm-medium=' + utmMedium + '&utm-campaign=' + utmCampaign + '&amount=' + amount + '&item-name=' + itemName;
+                var redirectUrl = submitUrl + '?utm_source=' + utmSource + '&utm_medium=' + utmMedium + '&utm_campaign=' + utmCampaign + '&amount=' + amount + '&item_name=' + itemName;
                 window.location = redirectUrl;
             }
 
