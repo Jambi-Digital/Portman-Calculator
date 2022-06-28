@@ -232,6 +232,9 @@ $green: #00dcb4;
             font-size: 1.25em;
             font-weight: bold;
             line-height: 1.35em;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
             img {
                 display: inline-block;
                 height: 1.5em;
