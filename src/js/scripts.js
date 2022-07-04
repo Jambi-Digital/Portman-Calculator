@@ -196,11 +196,17 @@ require('./lib/donut-chart.js');
             </div>
         
             `;
-            document.body.appendChild(calcDiv);
+            var parentWindow = window.parent.document.body;
+
+            if (!parentWindow) {
+                parentWindow = document.body;
+            }
+
+            parentWindow.appendChild(calcDiv);
 
             var overlay = document.createElement('div');
             overlay.id = 'portman-overlay';
-            document.body.appendChild(overlay);
+            parentWindow.appendChild(overlay);
         }, 
 
         events: function() {
@@ -222,7 +228,13 @@ require('./lib/donut-chart.js');
                 } , false);
             }
 
-            document.body.addEventListener("click", function (event) {
+            var parentWindow = window.parent.document.body;
+
+            if (!parentWindow) {
+                parentWindow = document.body;
+            }
+
+            parentWindow.addEventListener("click", function (event) {
 
                 var inputTarget = event.path[0];
 
