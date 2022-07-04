@@ -61,7 +61,7 @@ Here's an example of the init() function showing all available options:
         utm_medium: 'Your UTM Medium value',
         utm_campaign: 'Your UTM Campaign value',
         borrowing_amount: 90,
-        submit_url: 'https://portmanassetfinance.com',
+        submit_url: 'https://portmanassetfinance.co.uk',
         logo_image_url: 'https://www.portmanassetfinance.co.uk/calculator/default-logo.svg',
         accent_colour_one: '#00dcb4',
         accent_colour_two: '#184363',
