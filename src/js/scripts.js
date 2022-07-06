@@ -236,6 +236,14 @@ require('./lib/donut-chart.js');
 
             parentWindow.addEventListener("click", function (event) {
 
+                if (event.path) {
+                    var inputTarget = event.path[0];
+                }
+                else {
+                    var inputTarget = event.target;
+                }
+                
+
                 var inputTarget = event.path[0];
 
                 if (inputTarget.classList.contains("month") && inputTarget.parentNode.classList.contains('portman-month-options')) {
