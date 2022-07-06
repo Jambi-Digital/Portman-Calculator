@@ -244,7 +244,6 @@ require('./lib/donut-chart.js');
                 }
                 
 
-                var inputTarget = event.path[0];
 
                 if (inputTarget.classList.contains("month") && inputTarget.parentNode.classList.contains('portman-month-options')) {
                     var monthButtons = document.querySelectorAll("#portman-calculator .portman-month-options .month");
