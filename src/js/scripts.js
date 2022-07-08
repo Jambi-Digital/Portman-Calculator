@@ -19,6 +19,27 @@ require('./lib/donut-chart.js');
             // this.dump();
         },  
 
+        getMonthlyRate: function(itemPrice, numberOfMonths, format=false) {
+            if (itemPrice > 0) {
+                var interestRate = this.config.min_rate / 100;
+    
+                var years = numberOfMonths / 12;
+    
+                var interest = 1 + (interestRate * years);
+                var totalPayment = itemPrice * interest;
+    
+                var perMonthTotal = totalPayment / numberOfMonths;
+                
+                if (format) {
+                    return this.formatCurrency(perMonthTotal);
+                }
+                else {
+                    return perMonthTotal;
+                }
+                
+            }
+        },
+
         defaults: function() {
             this.defaults = {
                 borrowing_amount: 90,
@@ -40,6 +61,8 @@ require('./lib/donut-chart.js');
                     utm_source: options.utm_source ? options.utm_source : this.config.utm_source,
                     utm_medium: options.utm_medium ? options.utm_medium : this.config.utm_medium,
                     utm_campaign: options.utm_campaign ? options.utm_campaign : this.config.utm_campaign,
+                    min_rate: 3.9,
+                    max_rate: 14.9
                 };
             }
             else {
@@ -61,6 +84,9 @@ require('./lib/donut-chart.js');
             var utmSource = this.config.utm_source;
             var utmMedium = this.config.utm_medium;
             var utmCampaign = this.config.utm_campaign;
+
+            var minRate = this.config.min_rate;
+            var maxRate = this.config.max_rate;
 
             var itemBorrowingAmount = itemPrice * (borrowingAmount / 100);
             var deposit = 100 - parseInt(borrowingAmount);
@@ -127,7 +153,7 @@ require('./lib/donut-chart.js');
             <div class="field credit-profile">
                 <label>4. Select your credit profile</label>
                 <input type="range" id="portman_credit_profile" name="portman_credit_profile" 
-                min="3.9" max="14.9" value="3.9" step="0.1">
+                min="` + minRate + `" max="` + maxRate + `" value="` + minRate + `" step="0.1">
                 <div class="credit-profile-labels">  
                     <span>Exceptional</span>
                     <span>Good</span>
@@ -235,7 +261,7 @@ require('./lib/donut-chart.js');
             }
 
             parentWindow.addEventListener("click", function (event) {
-
+                
                 if (event.path) {
                     var inputTarget = event.path[0];
                 }
