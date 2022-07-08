@@ -98,3 +98,20 @@ All the options labelled as overridable in Step 2 can be overridden in this way.
       portman-calculator-submit-url='https://portmanassetfinance.co.uk/your-landing-page' >
         View financing options
     </button>
+    
+---
+
+# Other functions
+
+## getMonthlyRate(borrowingAmount, numberOfMonths, format = false)
+
+You can use the calculator to generate the monthly repayment rate based on the initial borrowing amount and the duration of the loan in months. There is also an option to format the returned figure. 
+
+    var calc = Object.create(PortmanCalculator);
+    var rate = calc.getMonthlyRate(50000, 72, true);
+
+The above code will show the monthly repayment rate for a £50,000 loan over 72 months. Because of the third parameter is true the function will return '£1,542.50' rather than '1542.50'. 
+
+This function can only be called after the calc.init({}) function has been called. 
+
+
