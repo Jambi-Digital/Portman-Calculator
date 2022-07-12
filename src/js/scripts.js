@@ -299,7 +299,13 @@ require('./lib/donut-chart.js');
             
             window.addEventListener('change', function (event) { 
                 
-                var inputTarget = event.path[0];
+                if (event.path) {
+                    var inputTarget = event.path[0];
+                }
+                else {
+                    var inputTarget = event.target;
+                }
+                
                 if (inputTarget.id == 'portman_item_price') {
                     var borrowingAmount = inputTarget.getAttribute('data-borrowing-amount');
                     var newBorrowingAmount = inputTarget.value * (borrowingAmount / 100);
