@@ -62,7 +62,9 @@ require('./lib/donut-chart.js');
                     utm_medium: options.utm_medium ? options.utm_medium : this.config.utm_medium,
                     utm_campaign: options.utm_campaign ? options.utm_campaign : this.config.utm_campaign,
                     min_rate: 3.9,
-                    max_rate: 14.9
+                    max_rate: 14.9,
+                    // parent_window: window.parent.document ? window.parent.document : document
+                    parent_window: document
                 };
             }
             else {
@@ -94,18 +96,18 @@ require('./lib/donut-chart.js');
             var formattedItemPrice = this.formatCurrency(itemPrice);
             var formattedBorrowingAmount = this.formatCurrency(itemBorrowingAmount);
 
-            var calcDiv = document.getElementById("portman-calculator");
+            var calcDiv = this.config.parent_window.getElementById("portman-calculator");
             if (calcDiv) {
                 calcDiv.remove();
             }
 
-            var overlay = document.getElementById("portman-overlay");
+            var overlay = this.config.parent_window.getElementById("portman-overlay");
             if (overlay) {
                 overlay.remove();
             }
 
             
-            var calcDiv = document.createElement('div');
+            var calcDiv = this.config.parent_window.createElement('div');
             calcDiv.id = 'portman-calculator';
             calcDiv.innerHTML = `
             <img src='https://portmanassetfinance.co.uk/calculator/close-icon.svg' id='portman-close-icon'>
@@ -222,46 +224,39 @@ require('./lib/donut-chart.js');
             </div>
         
             `;
-            var parentWindow = window.parent.document.body;
+            
+            this.config.parent_window.body.appendChild(calcDiv);
 
-            if (!parentWindow) {
-                parentWindow = document.body;
-            }
-
-            parentWindow.appendChild(calcDiv);
-
-            var overlay = document.createElement('div');
+            var overlay = this.config.parent_window.createElement('div');
             overlay.id = 'portman-overlay';
-            parentWindow.appendChild(overlay);
+            this.config.parent_window.body.appendChild(overlay);
         }, 
 
         events: function() {
             let scope = this;
+            setTimeout(() => {
+                var allButtons = [];
+                allButtons = Array.prototype.concat.apply(allButtons, this.config.parent_window.getElementsByClassName("portman-calculator"));
+                allButtons = Array.prototype.concat.apply(allButtons, document.body.getElementsByClassName("portman-calculator"));
 
-            var calculatorButtons = document.getElementsByClassName("portman-calculator");
-            for (var i = 0; i < calculatorButtons.length; i++) {
-                calculatorButtons[i].addEventListener('click', function() {
-                    var itemPrice = this.getAttribute("portman-calculator-item-price");
-                    var itemName = this.getAttribute("portman-calculator-item-name");
-                    var borrowingAmount = this.getAttribute("portman-calculator-borrowing-amount");
-                    var submitUrl = this.getAttribute("portman-calculator-submit-url");
+                for (var i = 0; i < allButtons.length; i++) {
+                    allButtons[i].addEventListener('click', function() {
+                        var itemPrice = this.getAttribute("portman-calculator-item-price");
+                        var itemName = this.getAttribute("portman-calculator-item-name");
+                        var borrowingAmount = this.getAttribute("portman-calculator-borrowing-amount");
+                        var submitUrl = this.getAttribute("portman-calculator-submit-url");
 
-                    scope.build(itemPrice, borrowingAmount, submitUrl, itemName);
+                        scope.build(itemPrice, borrowingAmount, submitUrl, itemName);
 
-                    scope.showCalculator();
-                    scope.updateDonut();
+                        scope.showCalculator();
+                        scope.updateDonut();
 
-                } , false);
-            }
+                    } , false);
+                }
+            }, 2000);
+            
 
-            var parentWindow = window.parent.document.body;
-
-            if (!parentWindow) {
-                parentWindow = document.body;
-            }
-
-            parentWindow.addEventListener("click", function (event) {
-                
+            this.config.parent_window.addEventListener("click", function (event) {
                 if (event.path) {
                     var inputTarget = event.path[0];
                 }
@@ -272,7 +267,7 @@ require('./lib/donut-chart.js');
 
 
                 if (inputTarget.classList.contains("month") && inputTarget.parentNode.classList.contains('portman-month-options')) {
-                    var monthButtons = document.querySelectorAll("#portman-calculator .portman-month-options .month");
+                    var monthButtons = scope.config.parent_window.querySelectorAll("#portman-calculator .portman-month-options .month");
 
                     for (var i = 0; i < monthButtons.length; i++) {
                         monthButtons[i].classList.remove('active');
@@ -297,7 +292,7 @@ require('./lib/donut-chart.js');
             });
 
             
-            window.addEventListener('change', function (event) { 
+            this.config.parent_window.addEventListener('change', function (event) { 
                 
                 if (event.path) {
                     var inputTarget = event.path[0];
@@ -305,11 +300,10 @@ require('./lib/donut-chart.js');
                 else {
                     var inputTarget = event.target;
                 }
-                
                 if (inputTarget.id == 'portman_item_price') {
                     var borrowingAmount = inputTarget.getAttribute('data-borrowing-amount');
                     var newBorrowingAmount = inputTarget.value * (borrowingAmount / 100);
-                    document.getElementById('portman_borrowing_amount').value = scope.formatCurrency(Math.floor(newBorrowingAmount));
+                    this.config.parent_window.getElementById('portman_borrowing_amount').value = scope.formatCurrency(Math.floor(newBorrowingAmount));
                     scope.updateDonut();
 
                     inputTarget.value = scope.formatCurrency(inputTarget.value);
@@ -328,11 +322,11 @@ require('./lib/donut-chart.js');
         },        
 
         updateDonut: function() {
-            var borrowingAmount = this.unFormatCurrency(document.getElementById('portman_borrowing_amount').value);
+            var borrowingAmount = this.unFormatCurrency(this.config.parent_window.getElementById('portman_borrowing_amount').value);
 
             if (borrowingAmount > 0) {
-                var months = document.querySelectorAll("#portman-calculator .portman-month-options .month.active")[0].getAttribute('data-months');
-                var interestRate = (document.getElementById('portman_credit_profile').value) / 100;
+                var months = this.config.parent_window.querySelectorAll("#portman-calculator .portman-month-options .month.active")[0].getAttribute('data-months');
+                var interestRate = (this.config.parent_window.getElementById('portman_credit_profile').value) / 100;
     
                 var years = months / 12;
     
@@ -347,7 +341,7 @@ require('./lib/donut-chart.js');
                 perMonthTotal = perMonthTotal.toFixed(2);
                 totalPayment = totalPayment.toFixed(2);
     
-                var donutExists = document.querySelectorAll("#portman-calculator #donut-chart .inner-circle")[0];
+                var donutExists = this.config.parent_window.querySelectorAll("#portman-calculator #donut-chart .inner-circle")[0];
     
                 var donutData = {
                     total: perMonthTotal,
@@ -361,19 +355,19 @@ require('./lib/donut-chart.js');
     
                 if (donutExists) {
                     Donut.update({
-                        container: document.getElementById('donut-chart'),
+                        container: this.config.parent_window.getElementById('donut-chart'),
                         data: donutData
                     });
                 }
                 else {        
                     Donut.init({
-                        container: document.getElementById('donut-chart'),
+                        container: this.config.parent_window.getElementById('donut-chart'),
                         data: donutData
                     });
                 }
                 
-                document.getElementById('portman_total_payable').innerHTML = this.formatCurrency(totalPayment);
-                document.getElementById('portman_monthly_payment').innerHTML = this.formatCurrency(perMonthTotal);
+                this.config.parent_window.getElementById('portman_total_payable').innerHTML = this.formatCurrency(totalPayment);
+                this.config.parent_window.getElementById('portman_monthly_payment').innerHTML = this.formatCurrency(perMonthTotal);
             }
         },
 
@@ -383,34 +377,34 @@ require('./lib/donut-chart.js');
             var utmMedium = submitButton.getAttribute("data-utm-medium");
             var utmCampaign = submitButton.getAttribute("data-utm-campaign");
             var itemName = submitButton.getAttribute("data-item-name");
-            var amount = this.unFormatCurrency(document.getElementById('portman_item_price').value);
+            var amount = this.unFormatCurrency(this.config.parent_window.getElementById('portman_item_price').value);
 
             if (submitUrl && utmSource && utmMedium && utmCampaign) {
                 var redirectUrl = submitUrl + '?utm_source=' + utmSource + '&utm_medium=' + utmMedium + '&utm_campaign=' + utmCampaign + '&amount=' + amount + '&item_name=' + itemName;
-                window.location = redirectUrl;
+                this.config.parent_window.location = redirectUrl;
             }
 
         },
 
         showCalculator: function() {
-            var calcDiv = document.getElementById("portman-calculator");
+            var calcDiv = this.config.parent_window.getElementById("portman-calculator");
             if (calcDiv) {
                 calcDiv.classList.add("active");
             }
 
-            var overlay = document.getElementById("portman-overlay");
+            var overlay = this.config.parent_window.getElementById("portman-overlay");
             if (overlay) {
                 overlay.classList.add("active");
             }
         },
 
         hideCalculator: function() {
-            var calcDiv = document.getElementById("portman-calculator");
+            var calcDiv = this.config.parent_window.getElementById("portman-calculator");
             if (calcDiv) {
                 calcDiv.classList.remove("active");
             }
 
-            var overlay = document.getElementById("portman-overlay");
+            var overlay = this.config.parent_window.getElementById("portman-overlay");
             if (overlay) {
                 overlay.classList.remove("active");
             }
