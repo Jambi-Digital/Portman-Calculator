@@ -63,8 +63,8 @@ require('./lib/donut-chart.js');
                     utm_campaign: options.utm_campaign ? options.utm_campaign : this.config.utm_campaign,
                     min_rate: 3.9,
                     max_rate: 14.9,
-                    // parent_window: window.parent.document ? window.parent.document : document
-                    parent_window: document
+                    parent_window: window.parent.document ? window.parent.document : document
+                
                 };
             }
             else {
@@ -76,6 +76,9 @@ require('./lib/donut-chart.js');
 
         build: function(itemPrice = false, borrowingAmount = false, submitUrl = false, itemName = false) {      
             var itemPrice = itemPrice ? itemPrice : '';
+            if (itemPrice == 0) {
+                itemPrice = 10000;
+            }
             var borrowingAmount = borrowingAmount ? borrowingAmount : this.config.borrowing_amount;
             var submitUrl = submitUrl ? submitUrl : this.config.submit_url;
             
