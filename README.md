@@ -53,6 +53,7 @@ There are also other options available, listed here:
 | utm_source          | UTM source field                                                                                                                                | None - required field                                             | String                    | No          |
 | utm_medium          | UTM medium field                                                                                                                                | None - required field                                             | String                    | No          |
 | utm_campaign        | UTM campaign field                                                                                                                              | None - required field                                             | String                    | No          |
+| influencer          | Influencer code sent to you by Portman                                                                                                          | Empty string                                         | String                    | No          |
 
 Here's an example of the init() function showing all available options: 
 
@@ -65,6 +66,7 @@ Here's an example of the init() function showing all available options:
         logo_image_url: 'https://www.portmanassetfinance.co.uk/calculator/default-logo.svg',
         accent_colour_one: '#00dcb4',
         accent_colour_two: '#184363',
+        influencer: '0123456789'
     });
 
 ## Step three - hooking the calculator to an element
