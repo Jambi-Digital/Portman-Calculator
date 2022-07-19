@@ -47,6 +47,7 @@ require('./lib/donut-chart.js');
                 logo_image_url: 'https://www.portmanassetfinance.co.uk/calculator/default-logo.svg',
                 accent_colour_one: '#00dcb4',
                 accent_colour_two: '#4747F5',
+                influencer: ''
             };
         },
        
@@ -63,6 +64,7 @@ require('./lib/donut-chart.js');
                     utm_campaign: options.utm_campaign ? options.utm_campaign : this.config.utm_campaign,
                     min_rate: 3.9,
                     max_rate: 14.9,
+                    influencer: options.influencer ? options.influencer : this.defaults.influencer,
                     parent_window: window.parent.document ? window.parent.document : document
                 
                 };
@@ -92,6 +94,8 @@ require('./lib/donut-chart.js');
 
             var minRate = this.config.min_rate;
             var maxRate = this.config.max_rate;
+
+            var influencer = this.config.influencer;
 
             var itemBorrowingAmount = itemPrice * (borrowingAmount / 100);
             var deposit = 100 - parseInt(borrowingAmount);
@@ -216,7 +220,7 @@ require('./lib/donut-chart.js');
             </svg>
                 For illustration purposes only. Our experts will calculate the rate you may be offered based on your individual circumstances. This is not an offer or quote for your finance.
             </div>
-            <button id='portman-submit' style="background-color:` + accentColour + `;" data-submit-url="` + submitUrl + `" data-utm-source="` + utmSource + `" data-utm-campaign="` + utmCampaign + `" data-utm-medium="` + utmMedium + `" data-item-name="` + itemName + `">Get a Quote</button>
+            <button id='portman-submit' style="background-color:` + accentColour + `;" data-submit-url="` + submitUrl + `" data-utm-source="` + utmSource + `" data-utm-campaign="` + utmCampaign + `" data-utm-medium="` + utmMedium + `" data-item-name="` + itemName + `" data-influencer="` + influencer + `">Get a Quote</button>
             <div class='footer'>
                 <div class='top'>
                     Powered by <img src='https://www.portmanassetfinance.co.uk/calculator/default-logo.svg' alt='Portman'> Personal, professional finance for UK Businesses
@@ -380,10 +384,18 @@ require('./lib/donut-chart.js');
             var utmMedium = submitButton.getAttribute("data-utm-medium");
             var utmCampaign = submitButton.getAttribute("data-utm-campaign");
             var itemName = submitButton.getAttribute("data-item-name");
+            var influencer = submitButton.getAttribute("data-influencer");
+
             var amount = this.unFormatCurrency(this.config.parent_window.getElementById('portman_item_price').value);
 
             if (submitUrl && utmSource && utmMedium && utmCampaign) {
                 var redirectUrl = submitUrl + '?utm_source=' + utmSource + '&utm_medium=' + utmMedium + '&utm_campaign=' + utmCampaign + '&amount=' + amount + '&item_name=' + itemName;
+
+                if (influencer) {
+                    redirectUrl = redirectUrl + '&influencer=' + influencer;
+                }
+
+
                 this.config.parent_window.location = redirectUrl;
             }
 
